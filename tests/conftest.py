@@ -8,7 +8,7 @@ def client():
         {"name": "Test Club", "email": "test@test.com", "points": "15"}
     ]
     server.competitions = [
-        {"name": "Test Competition", "date": "2020-03-27 10:00:00", "numberOfPlaces": "25"}
+        {"name": "Test Competition", "date": "2030-03-27 10:00:00", "numberOfPlaces": "25"}
     ]
     with server.app.test_client() as client:
         yield client
