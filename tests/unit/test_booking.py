@@ -42,3 +42,15 @@ def test_purchase_places_more_than_12(client):
     assert b'You cannot book more than 12 places' in response.data
     # Points should not be deducted
     assert int(club['points']) == 15
+
+def test_purchase_places_past_competition(client):
+    server.competitions.append({
+        "name": "Past Competition", "date": "2020-03-27 10:00:00", "numberOfPlaces": "25"
+    })
+    response = client.post('/purchasePlaces', data={
+        'club': 'Test Club',
+        'competition': 'Past Competition',
+        'places': '5'
+    })
+    assert response.status_code == 200
+    assert b'You cannot book places for a past competition.' in response.data
