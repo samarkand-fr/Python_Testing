@@ -54,3 +54,21 @@ def test_purchase_places_past_competition(client):
     })
     assert response.status_code == 200
     assert b'You cannot book places for a past competition.' in response.data
+
+def test_issue_6_points_updates_are_reflected(client):
+    # This test proves that Issue #6 is fixed: when a booking is confirmed,
+    # the points are deducted and reflected correctly in the UI.
+    
+    # 1. Login
+    response = client.post('/showSummary', data={'email': 'test@test.com'})
+    assert b'Points available: 15' in response.data
+    
+    # 2. Book 5 places
+    response = client.post('/purchasePlaces', data={
+        'club': 'Test Club',
+        'competition': 'Test Competition',
+        'places': '5'
+    })
+    
+    # 3. Check the UI again, points should be 10 now
+    assert b'Points available: 10' in response.data
