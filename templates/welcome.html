@@ -15,7 +15,10 @@
         {% endfor %}
        </ul>
     {% endif%}
+    {% endwith %}
     Points available: {{club['points']}}
+    <br>
+    <a href="{{ url_for('points') }}">View Clubs Points Board</a>
     <h3>Competitions:</h3>
     <ul>
         {% for comp in competitions%}
@@ -30,7 +33,6 @@
         <hr />
         {% endfor %}
     </ul>
-    {%endwith%}
-
+    
 </body>
 </html>
