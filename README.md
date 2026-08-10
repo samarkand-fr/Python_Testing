@@ -1,51 +1,142 @@
-# gudlift-registration
+# GUDLFT Registration Portal
 
-1. Why
+A lightweight proof-of-concept (POC) booking platform for local and regional powerlifting competition organizers. The application allows club secretaries to manage and redeem points to register athletes for upcoming competitions.
 
+---
 
-    This is a proof of concept (POC) project to show a light-weight version of our competition booking platform. The aim is the keep things as light as possible, and use feedback from the users to iterate.
+## 1. Project Overview & Features
 
-2. Getting Started
+- **Secretary Authentication**: Simple email-based login for authorized club secretaries.
+- **Competition Booking**: Secretaries can redeem club points for competition places (1 point = 1 place).
+- **Fairness Rules**:
+  - Maximum **12 places** per competition per club.
+  - Booking prohibited if points are insufficient.
+  - Booking prohibited if competition places are sold out.
+  - Booking prohibited for past competitions.
+- **Public Points Board**: A public, read-only display (`/points`) showing the current point balance for all clubs without requiring login.
 
-    This project uses the following technologies:
+---
 
-    * Python v3.x+
+## 2. Environment Setup & Installation
 
-    * [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+### Prerequisites
+- Python 3.8+
+- Virtual environment (`venv`)
 
-        Whereas Django does a lot of things for us out of the box, Flask allows us to add only what we need. 
-     
+### Installation Steps
 
-    * [Virtual environment](https://virtualenv.pypa.io/en/stable/installation.html)
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/samarkand-fr/Python_Testing.git
+   cd gudlft
+   ```
 
-        This ensures you'll be able to install the correct packages without interfering with Python on your machine.
+2. **Create and activate a virtual environment**:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
 
-        Before you begin, please ensure you have this installed globally. 
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
+4. **Run the application**:
+   ```bash
+   export FLASK_APP=server.py
+   flask run
+   ```
+   The application will be accessible at `http://127.0.0.1:5000/`.
 
-3. Installation
+---
 
-    - After cloning, change into the directory and type <code>virtualenv .</code>. This will then set up a a virtual python environment within that directory.
+## 3. Git Branching Strategy & Conventions
 
-    - Next, type <code>source bin/activate</code>. You should see that your command prompt has changed to the name of the folder. This means that you can install packages in here without affecting affecting files outside. To deactivate, type <code>deactivate</code>
+The project follows standard Git branching conventions:
 
-    - Rather than hunting around for the packages you need, you can install in one step. Type <code>pip install -r requirements.txt</code>. This will install all the packages listed in the respective file. If you install a package, make sure others know by updating the requirements.txt file. An easy way to do this is <code>pip freeze > requirements.txt</code>
+### Branch Naming Format
+`<type>/<descriptive-name>`
+- `bug/<name>`: Bug fixes (e.g., `bug/login-email-crash`, `bug/points-redemption`)
+- `feature/<name>`: New features (e.g., `feature/points-board`)
+- `improvement/<name>`: Code quality and refactoring (e.g., `improvement/code-readability`)
+- `test/<name>`: Test suite updates (e.g., `test/integration-booking-flow`)
+- `perf/<name>`: Performance testing (e.g., `perf/locust-tests`)
 
-    - Flask requires that you set an environmental variable to the python file. However you do that, you'll want to set the file to be <code>server.py</code>. Check [here](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application) for more details
+### Key Branches
+- **`master`**: Primary source of truth. Contains production-ready, fully tested code.
+- **`qa`**: Dedicated code review / staging branch created from `master` for QA evaluation (not merged back into `master`).
 
-    - You should now be ready to test the application. In the directory, type either <code>flask run</code> or <code>python -m flask run</code>. The app should respond with an address you should be able to go to using your browser.
+---
 
-4. Current Setup
+## 4. Testing Suite
 
-    The app is powered by [JSON files](https://www.tutorialspoint.com/json/json_quick_guide.htm). This is to get around having a DB until we actually need one. The main ones are:
-     
-    * competitions.json - list of competitions
-    * clubs.json - list of clubs with relevant information. You can look here to see what email addresses the app will accept for login.
+The project includes unit and integration tests grouped in separate folders under `tests/`.
 
-5. Testing
+### Running Tests
 
-    You are free to use whatever testing framework you like-the main thing is that you can show what tests you are using.
+- **Run Unit Tests**:
+  ```bash
+  PYTHONPATH=. pytest tests/unit/
+  ```
 
-    We also like to show how well we're testing, so there's a module called 
-    [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
+- **Run Integration Tests**:
+  ```bash
+  PYTHONPATH=. pytest tests/integration/
+  ```
 
+- **Run All Tests**:
+  ```bash
+  PYTHONPATH=. pytest tests/
+  ```
+
+### Code Coverage
+
+The target coverage is **> 60%** (Currently achieved: **94%**).
+
+To generate a coverage report:
+```bash
+PYTHONPATH=. pytest --cov=server --cov-report=term-missing tests/
+```
+
+---
+
+## 5. Performance Testing (Locust)
+
+Performance testing is configured using [Locust](https://locust.io/) simulating **6 concurrent users**.
+
+### Performance SLAs
+- **Competition List Fetching (`/showSummary`)**: Must load in **< 5 seconds**.
+- **Points Update / Purchase (`/purchasePlaces`)**: Must execute in **< 2 seconds**.
+
+### Running Performance Tests
+
+1. Start the Flask application:
+   ```bash
+   export FLASK_APP=server.py
+   flask run --port=5000
+   ```
+
+2. Run Locust in headless mode:
+   ```bash
+   locust -f locustfile.py --headless -u 6 -r 2 --run-time 10s --host http://127.0.0.1:5000
+   ```
+
+Detailed results are available in [`performance_report.md`](performance_report.md).
+
+---
+
+## 6. Project Architecture & Data Storage
+
+The application uses lightweight JSON files as an in-memory data store:
+- **`clubs.json`**: List of clubs, secretary emails, and point balances.
+- **`competitions.json`**: List of competitions, dates, and available places.
+
+---
+
+## 7. External Documentation & Resources
+
+- [Flask Documentation](https://flask.palletsprojects.com/)
+- [Pytest Documentation](https://docs.pytest.org/)
+- [Locust Performance Testing](https://docs.locust.io/)
+- [Coverage.py Documentation](https://coverage.readthedocs.io/)
