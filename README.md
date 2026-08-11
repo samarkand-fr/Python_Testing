@@ -20,6 +20,7 @@ A lightweight proof-of-concept (POC) booking platform for local and regional pow
 ## 2. Fork & Repository Origin
 
 This repository is a fork of the original OpenClassrooms project repository:
+
 - **Upstream Repository**: [`OpenClassrooms-Student-Center/Python_Testing`](https://github.com/OpenClassrooms-Student-Center/Python_Testing)
 - **Fork Repository**: [`samarkand-fr/Python_Testing`](https://github.com/samarkand-fr/Python_Testing)
 
@@ -41,46 +42,9 @@ All bug fixes, enhancements, and Phase 2 features were developed in isolated bra
 | **N/A** | Integration & End-to-End Test Suite | `test/integration-booking-flow` | ✅ Resolved | Added 3 multi-step integration test flows in `tests/integration/` (Coverage: 94%). |
 | **N/A** | Locust Performance Load Testing | `perf/locust-tests` | ✅ Resolved | Created `locustfile.py` simulating 6 users; validated SLAs (< 5s loading, < 2s updates) and created `performance_report.md`. |
 
-## 4. Environment Setup & Installation
-
-### Prerequisites
-
-- Python 3.8+
-- Virtual environment (`venv`)
-
-### Installation Steps
-
-1. **Clone the repository**:
-
-   ```bash
-   git clone https://github.com/samarkand-fr/Python_Testing.git
-   cd gudlft
-   ```
-
-2. **Create and activate a virtual environment**:
-
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-
-3. **Install dependencies**:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Run the application**:
-
-   ```bash
-   export FLASK_APP=server.py
-   flask run
-   ```
-   The application will be accessible at `http://127.0.0.1:5000/`.
-
 ---
 
-## 3. Git Branching Strategy & Conventions
+## 4. Git Branching Strategy & Conventions
 
 The project follows standard Git branching conventions:
 
@@ -97,11 +61,51 @@ The project follows standard Git branching conventions:
 ### Key Branches
 
 - **`master`**: Primary source of truth. Contains production-ready, fully tested code.
-- **`qa`**: Dedicated code review / staging branch created from `master` for QA evaluation (not merged back into `master`).
+- **`qa`**: Dedicated code review / staging branch created from `master` for QA evaluation.
 
 ---
 
-## 4. Testing Suite
+## 5. Environment Setup & Installation
+
+### Prerequisites
+
+- Python 3.8+
+- Virtual environment (`venv`)
+
+### Installation Steps
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/samarkand-fr/Python_Testing.git
+   cd Python_Testing
+   ```
+
+2. **Create and activate a virtual environment**:
+
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies**:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Run the application**:
+
+   ```bash
+   export FLASK_APP=server.py  # On Windows PowerShell: $env:FLASK_APP="server.py"
+   flask run
+   ```
+
+   The application will be accessible at `http://127.0.0.1:5000/`.
+
+---
+
+## 6. Testing Suite
 
 The project includes unit and integration tests grouped in separate folders under `tests/`.
 
@@ -110,19 +114,19 @@ The project includes unit and integration tests grouped in separate folders unde
 - **Run Unit Tests**:
 
   ```bash
-  PYTHONPATH=. pytest tests/unit/
+  python -m pytest tests/unit/
   ```
 
 - **Run Integration Tests**:
 
   ```bash
-  PYTHONPATH=. pytest tests/integration/
+  python -m pytest tests/integration/
   ```
 
 - **Run All Tests**:
 
   ```bash
-  PYTHONPATH=. pytest tests/
+  python -m pytest tests/
   ```
 
 ### Code Coverage
@@ -132,14 +136,14 @@ The target coverage is **> 60%** (Currently achieved: **94%**).
 To generate a coverage report:
 
 ```bash
-PYTHONPATH=. pytest --cov=server --cov-report=term-missing tests/
+python -m pytest --cov=server --cov-report=term-missing tests/
 ```
 
 ---
 
-## 5. Performance Testing (Locust)
+## 7. Performance Testing (Locust)
 
-Performance testing is configured using [Locust](https://locust.io/) simulating **6 concurrent users**.
+Performance testing is configured using [Locust](https://locust.io/) simulating 6 concurrent users.
 
 ### Performance SLAs
 
@@ -148,14 +152,14 @@ Performance testing is configured using [Locust](https://locust.io/) simulating 
 
 ### Running Performance Tests
 
-1. Start the Flask application:
+1. **Start the Flask application**:
 
    ```bash
    export FLASK_APP=server.py
    flask run --port=5000
    ```
 
-2. Run Locust in headless mode:
+2. **Run Locust in headless mode**:
 
    ```bash
    locust -f locustfile.py --headless -u 6 -r 2 --run-time 10s --host http://127.0.0.1:5000
@@ -165,16 +169,16 @@ Detailed results are available in [`performance_report.md`](performance_report.m
 
 ---
 
-## 6. Project Architecture & Data Storage
+## 8. Project Architecture & Data Storage
 
 The application uses lightweight JSON files as an in-memory data store:
 
-- **`clubs.json`**: List of clubs, secretary emails, and point balances.
-- **`competitions.json`**: List of competitions, dates, and available places.
+- `clubs.json`: List of clubs, secretary emails, and point balances.
+- `competitions.json`: List of competitions, dates, and available places.
 
 ---
 
-## 7. External Documentation & Resources
+## 9. External Documentation & Resources
 
 - [Flask Documentation](https://flask.palletsprojects.com/)
 - [Pytest Documentation](https://docs.pytest.org/)
