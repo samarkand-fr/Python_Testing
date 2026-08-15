@@ -1,5 +1,6 @@
 from locust import HttpUser, task, between
 
+
 class GudliftPerformanceTest(HttpUser):
     wait_time = between(1, 2)
 
@@ -28,8 +29,11 @@ class GudliftPerformanceTest(HttpUser):
     @task(1)
     def test_purchase_places(self):
         """Simulate purchasing places / updating points (must be < 2s)."""
-        self.client.post("/purchasePlaces", data={
-            "club": self.club_name,
-            "competition": self.competition_name,
-            "places": "1"
-        })
+        self.client.post(
+            "/purchasePlaces",
+            data={
+                "club": self.club_name,
+                "competition": self.competition_name,
+                "places": "1",
+            },
+        )
